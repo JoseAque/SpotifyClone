@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:spotify/common/helpers/is_dark_mode.dart';
 import 'package:spotify/core/configs/assets/app_images.dart';
+import 'package:spotify/core/configs/theme/app_colors.dart';
 
 import '../../../common/widgets/button/appbar/app_bar.dart';
 import '../../../core/configs/assets/app_vectors.dart';
@@ -64,7 +66,28 @@ class _HomePageState extends State<HomePage>
   Widget _tabs() {
     return TabBar(
       controller: _tabController,
-      tabs: [Text('News'), Text('Videos'), Text('Artist'), Text('Podcast')],
+      isScrollable: true,
+      labelColor: context.isDarkMode ? Colors.white : Colors.black,
+      indicatorColor: AppColors.primary,
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
+      tabs: const [
+        Text(
+          'News',
+          style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
+        ),
+        Text(
+          'Videos',
+          style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
+        ),
+        Text(
+          'Artist',
+          style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
+        ),
+        Text(
+          'Podcast',
+          style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
+        ),
+      ],
     );
   }
 }
