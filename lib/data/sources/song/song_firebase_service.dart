@@ -12,19 +12,23 @@ class SongFirebaseServiceImpl extends SongFirebaseService {
   Future<Either> getNewsSongs() async {
     try {
       List<SongEntity> songs = [];
+
       var data = await FirebaseFirestore.instance
           .collection('Songs')
           .orderBy('releaseDate', descending: true)
-          .limit(3)
+          .limit(4)
           .get();
 
       for (var element in data.docs) {
-        var songModedl = SongModel.fromJson(element.data());
-        songs.add(songModedl.toEntity());
+        var songModel = SongModel.fromJson(element.data());
+        songs.add(songModel.toEntity());
       }
+
       return Right(songs);
-    } catch (e) {
-      return Left('An error ocurred, Please try again');
+    } catch (e, stack) {
+      print("🔥 FIREBASE ERROR → $e");
+      print("🔥 STACK → $stack");
+      return Left(e);
     }
   }
 }

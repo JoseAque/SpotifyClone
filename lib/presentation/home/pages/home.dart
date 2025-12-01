@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:spotify/common/helpers/is_dark_mode.dart';
+import 'package:spotify/common/widgets/appbar/app_bar.dart';
 import 'package:spotify/core/configs/assets/app_images.dart';
 import 'package:spotify/core/configs/theme/app_colors.dart';
-
-import '../../../common/widgets/button/appbar/app_bar.dart';
+import 'package:spotify/presentation/home/widgets/news_songs.dart';
 import '../../../core/configs/assets/app_vectors.dart';
 
 class HomePage extends StatefulWidget {
@@ -34,7 +34,22 @@ class _HomePageState extends State<HomePage>
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [_homeTopCard(), _tabs()],
+          children: [
+            _homeTopCard(),
+            _tabs(),
+            SizedBox(
+              height: 260,
+              child: TabBarView(
+                controller: _tabController,
+                children: [
+                  const NewsSongs(),
+                  Container(),
+                  Container(),
+                  Container(),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -67,6 +82,8 @@ class _HomePageState extends State<HomePage>
     return TabBar(
       controller: _tabController,
       isScrollable: true,
+      tabAlignment: TabAlignment.center,
+      dividerColor: Colors.transparent,
       labelColor: context.isDarkMode ? Colors.white : Colors.black,
       indicatorColor: AppColors.primary,
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),

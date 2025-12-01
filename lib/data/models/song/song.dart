@@ -4,7 +4,7 @@ import 'package:spotify/domain/entities/song/song.dart';
 class SongModel {
   String? title;
   String? artist;
-  String? duration;
+  num? duration;
   Timestamp? releaseDate;
 
   SongModel({
