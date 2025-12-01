@@ -5,6 +5,7 @@ import 'package:spotify/common/widgets/appbar/app_bar.dart';
 import 'package:spotify/core/configs/assets/app_images.dart';
 import 'package:spotify/core/configs/theme/app_colors.dart';
 import 'package:spotify/presentation/home/widgets/news_songs.dart';
+import 'package:spotify/presentation/home/widgets/play_list.dart';
 import '../../../core/configs/assets/app_vectors.dart';
 
 class HomePage extends StatefulWidget {
@@ -49,6 +50,8 @@ class _HomePageState extends State<HomePage>
                 ],
               ),
             ),
+            const SizedBox(height: 40),
+            const PlayList(),
           ],
         ),
       ),
