@@ -132,8 +132,35 @@ class SongFirebaseServiceImpl extends SongFirebaseService {
   }
 
   @override
-  Future<Either> getUserFavoriteSongs() {
-    // TODO: implement getUserFavoriteSongs
-    throw UnimplementedError();
+  Future<Either> getUserFavoriteSongs() async {
+    try {
+      final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+      final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+      var user = firebaseAuth.currentUser;
+      List<SongEntity> favoriteSongs = [];
+      String uId = user!.uid;
+      QuerySnapshot favoritesSnapshot = await firebaseFirestore
+          .collection('Users')
+          .doc(uId)
+          .collection('Favorites')
+          .get();
+
+      for (var element in favoritesSnapshot.docs) {
+        String songId = element['songId'];
+        var song = await firebaseFirestore
+            .collection('Songs')
+            .doc(songId)
+            .get();
+        SongModel songModel = SongModel.fromJson(song.data()!);
+        songModel.isFavorite = true;
+        songModel.songId = songId;
+        favoriteSongs.add(songModel.toEntity());
+      }
+
+      return Right(favoriteSongs);
+    } catch (e) {
+      print(e);
+      return const Left('An error occurred');
+    }
   }
 }

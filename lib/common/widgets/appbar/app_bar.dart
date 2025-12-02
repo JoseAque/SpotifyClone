@@ -10,6 +10,7 @@ class BasicAppbar extends StatelessWidget implements PreferredSizeWidget {
     this.hideBack = false,
     this.action,
     super.key,
+    required Color backgroundColor,
   });
 
   @override

@@ -7,8 +7,14 @@ import '../../../core/configs/theme/app_colors.dart';
 
 class FavoriteButton extends StatelessWidget {
   final SongEntity songEntity;
+  final Function? function;
   final VoidCallback? onChanged;
-  const FavoriteButton({required this.songEntity, this.onChanged, super.key});
+  const FavoriteButton({
+    required this.songEntity,
+    this.function,
+    this.onChanged,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +32,7 @@ class FavoriteButton extends StatelessWidget {
           onPressed: () async {
             await context.read<FavoritesCubit>().toggle(songEntity.songId);
             if (onChanged != null) onChanged!();
+            if (function != null) function!();
           },
           icon: Icon(
             isFav ? Icons.favorite : Icons.favorite_outline_outlined,
