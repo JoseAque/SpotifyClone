@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:spotify/presentation/song_player/bloc/song_player_state.dart';
@@ -8,13 +9,18 @@ class SongPlayerCubit extends Cubit<SongPlayerState> {
   Duration songDuration = Duration.zero;
   Duration songPosition = Duration.zero;
 
+  late StreamSubscription positionSub;
+  late StreamSubscription durationSub;
+
   SongPlayerCubit() : super(SongPlayerLoading()) {
-    audioPlayer.positionStream.listen((position) {
+    // Listener de la posición
+    positionSub = audioPlayer.positionStream.listen((position) {
       songPosition = position;
       updateSongPlayer();
     });
 
-    audioPlayer.durationStream.listen((duration) {
+    // Listener de duración
+    durationSub = audioPlayer.durationStream.listen((duration) {
       if (duration != null) {
         songDuration = duration;
       }
@@ -22,16 +28,16 @@ class SongPlayerCubit extends Cubit<SongPlayerState> {
   }
 
   void updateSongPlayer() {
+    if (isClosed) return; // evita el error de emitir después de cerrar
     emit(SongPlayerLoaded());
   }
 
   Future<void> loadSong(String url) async {
-    print(url);
     try {
       await audioPlayer.setUrl(url);
-      emit(SongPlayerLoaded());
+      updateSongPlayer();
     } catch (e) {
-      emit(SongPlayerFailure());
+      if (!isClosed) emit(SongPlayerFailure());
     }
   }
 
@@ -41,11 +47,14 @@ class SongPlayerCubit extends Cubit<SongPlayerState> {
     } else {
       audioPlayer.play();
     }
-    emit(SongPlayerLoaded());
+
+    if (!isClosed) emit(SongPlayerLoaded());
   }
 
   @override
   Future<void> close() {
+    positionSub.cancel();
+    durationSub.cancel();
     audioPlayer.dispose();
     return super.close();
   }
