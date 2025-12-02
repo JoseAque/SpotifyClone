@@ -1,9 +1,13 @@
-abstract class FavoriteButtonState {}
+abstract class FavoritesState {}
 
-class FavoriteButtonInitial extends FavoriteButtonState {}
+class FavoritesLoading extends FavoritesState {}
 
-class FavoriteButtonUpdated extends FavoriteButtonState {
-  final bool isFavorite;
+class FavoritesLoaded extends FavoritesState {
+  final Set<String> favorites;
+  FavoritesLoaded(this.favorites);
+}
 
-  FavoriteButtonUpdated({required this.isFavorite});
+class FavoritesError extends FavoritesState {
+  final String message;
+  FavoritesError(this.message);
 }
