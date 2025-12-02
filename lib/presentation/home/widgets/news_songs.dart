@@ -44,7 +44,11 @@ class NewsSongs extends StatelessWidget {
     return ScrollConfiguration(
       //Para poder mover las canciones con el mouse
       behavior: const MaterialScrollBehavior().copyWith(
-        dragDevices: {PointerDeviceKind.mouse},
+        dragDevices: {
+          PointerDeviceKind.mouse,
+          PointerDeviceKind.touch,
+          PointerDeviceKind.trackpad,
+        },
       ),
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
