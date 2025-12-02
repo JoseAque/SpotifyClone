@@ -1,3 +1,165 @@
-# spotify
+A new Flutter project.
+# Spotify Clone (Flutter)
+
+An educational, cross-platform Spotify-style music app built with Flutter. It showcases modern Material theming, Firebase-backed authentication and persistence, global state management with `flutter_bloc`, and a polished player UI.
+
+## Overview
+- **Platforms:** Android, iOS, Web, Linux, macOS, Windows
+- **Core features:**
+	- Email/anonymous authentication via Firebase Auth
+	- Firestore-backed user profiles and favorites
+	- Themed UI with dark/light mode and selection/focus customization
+	- Home screen with search icon and enlarged app bar actions
+	- Song Player with play/pause and transport controls (repeat, previous, next, shuffle)
+	- Favorites synchronized across screens via a global Cubit
+	- Responsive UI with text overflow handling (ellipsis)
+
+## Tech Stack
+- **Flutter**: UI and cross-platform runtime
+- **Firebase**: Auth + Firestore (persistence)
+- **State Management**: `flutter_bloc` (Cubit)
+- **DI**: GetIt
+- **Build**: Gradle (Android), Xcode (iOS), CMake (desktop), Flutter web toolchain
+
+## Project Structure
+```
+lib/
+	main.dart                  # App bootstrap + Firebase init + Bloc providers
+	common/                    # Shared widgets and helpers
+		widgets/
+			appbar/                # Custom AppBar with optional leading/actions
+			favorite_button/       # Favorite icon bound to global FavoritesCubit
+		helpers/                 # UI and util helpers
+	core/
+		configs/
+			theme/                 # App themes and color schemes
+	presentation/
+		auth/                    # Auth screens and flows
+		choose_mode/             # Mode selection UI
+		intro/                   # Intro/onboarding
+		splash/                  # Splash screen
+		song_player/             # Player page, controls, slider
+		...
+assets/                      # Images, fonts, vectors
+android/ ios/ linux/ macos/ web/ windows/ # Platform specific entry points
+```
+
+## Getting Started
+1. Install Flutter (stable) and platform SDKs.
+2. Install Firebase CLI and FlutterFire CLI.
+3. Clone the repo and fetch dependencies.
+
+```bash
+git clone https://github.com/JoseAque/SpotifyClone.git
+cd SpotifyClone
+flutter pub get
+```
+
+### Configure Firebase
+Create a Firebase project and set up Firestore + Auth.
+
+```bash
+# Login and select project interactively
+firebase login
+flutter pub add flutterfire_cli
+dart run flutterfire_cli
+
+# Configure Firebase for all platforms in the workspace
+flutterfire configure --project <YOUR_FIREBASE_PROJECT_ID>
+
+# Verify generated options are referenced in main.dart
+```
+
+Enable services in the Firebase Console:
+- **Authentication:** Email/Password (and optionally Anonymous) enabled
+- **Firestore:** Create a Firestore database (Start in production, then set rules appropriately)
+
+Example permissive rules for local testing:
+```
+rules_version = '2';
+service cloud.firestore {
+	match /databases/{database}/documents {
+		match /{document=**} {
+			allow read, write: if true;
+		}
+	}
+}
+```
+Note: Do not use permissive rules in production.
+
+### Run the App
+```bash
+# Mobile (connect device or start emulator)
+flutter run
+
+# Web (debug)
+flutter run -d chrome
+
+# Desktop (Linux/macOS/Windows)
+flutter run -d linux   # or -d macos / -d windows
+```
+
+### Build
+```bash
+# Android
+flutter build apk
+
+# iOS (requires Xcode/macOS)
+flutter build ios
+
+# Web
+flutter build web
+
+# Desktop
+flutter build linux    # or macos / windows
+```
+
+## Features in Detail
+- **Authentication:**
+	- Initializes Firebase in `lib/main.dart` using FlutterFire options.
+	- Handles signup/login flows and ensures Firestore documents are created under `Users/{uid}`.
+
+- **Favorites Sync:**
+	- `FavoritesCubit` maintains a `Set<String>` of favorite song IDs.
+	- Firestore structure: `Users/{uid}/Favorites/{songId}` documents.
+	- `favorite_button` widget reads global state and toggles via a use case/service.
+
+- **Song Player:**
+	- Play/Pause integrated with `SongPlayerCubit`.
+	- Transport icons (repeat, previous, next, shuffle) placed under the slider.
+	- Slider displays and seeks playback position when wired to the audio backend.
+
+- **UI & Theming:**
+	- Dark/light themes with customized `ColorScheme`.
+	- Input focus and selection colors adjusted to match design.
+	- AppBar leading search icon and enlarged actions on Home.
+	- Text overflow handled with ellipsis on key list items.
+
+## Configuration Notes
+- Ensure `Firebase.initializeApp` uses the generated options from `flutterfire configure`.
+- If Firestore writes appear blocked:
+	- Confirm Firestore database exists (created from Firebase Console).
+	- Review rules and wait for propagation.
+	- Hot restart the app after rule changes.
+
+## Troubleshooting
+- **Rules not applying / writes hang:**
+	- Verify the correct Firebase project is selected.
+	- Ensure Firestore was created (the database must exist before rules work).
+	- Temporarily set permissive rules to isolate issues, then tighten.
+
+- **Auth works but Users collection missing:**
+	- Confirm the signup flow calls Firestore `set` after auth.
+	- Check logs for `FirebaseException` details.
+
+- **Icons or AppBar styling off in light mode:**
+	- Confirm `ThemeData` overrides for light/dark are consistent.
+	- Validate `AppBar` background/foreground colors in your theme.
+
+## Contributing
+Pull requests are welcome for bug fixes, features, and documentation. Please keep changes focused and consistent with the existing style.
+
+## License
+This project is for educational purposes. No affiliation with Spotify.
 
 A new Flutter project.
