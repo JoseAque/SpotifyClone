@@ -1,7 +1,9 @@
-A new Flutter project.
 # Spotify Clone (Flutter)
 
 An educational, cross-platform Spotify-style music app built with Flutter. It showcases modern Material theming, Firebase-backed authentication and persistence, global state management with `flutter_bloc`, and a polished player UI.
+
+<img width="1121" height="911" alt="Spotify-Clone" src="https://github.com/user-attachments/assets/872d68ca-91c6-4eed-b29d-eaabf7e34e83" />
+
 
 ## Overview
 - **Platforms:** Android, iOS, Web, Linux, macOS, Windows
@@ -162,4 +164,4 @@ Pull requests are welcome for bug fixes, features, and documentation. Please kee
 ## License
 This project is for educational purposes. No affiliation with Spotify.
 
-A new Flutter project.
+Spotify Clone (Flutter)
