@@ -18,23 +18,26 @@ class NewsSongs extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => NewsSongsCubit()..getNewsSongs(),
-      child: SizedBox(
-        height: 200,
-        child: BlocBuilder<NewsSongsCubit, NewsSongsState>(
-          builder: (context, state) {
-            if (state is NewsSongsLoading) {
-              return Container(
-                alignment: Alignment.center,
-                child: const CircularProgressIndicator(),
-              );
-            }
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: SizedBox(
+          height: 200,
+          child: BlocBuilder<NewsSongsCubit, NewsSongsState>(
+            builder: (context, state) {
+              if (state is NewsSongsLoading) {
+                return Container(
+                  alignment: Alignment.center,
+                  child: const CircularProgressIndicator(),
+                );
+              }
 
-            if (state is NewsSongsLoaded) {
-              return _songs(state.songs);
-            }
+              if (state is NewsSongsLoaded) {
+                return _songs(state.songs);
+              }
 
-            return Container();
-          },
+              return Container();
+            },
+          ),
         ),
       ),
     );

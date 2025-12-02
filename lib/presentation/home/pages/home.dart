@@ -8,7 +8,6 @@ import 'package:spotify/presentation/home/widgets/news_songs.dart';
 import 'package:spotify/presentation/home/widgets/play_list.dart';
 import 'package:spotify/presentation/profile/pages/profile.dart';
 
-import '../../../common/widgets/appbar/app_bar.dart';
 import '../../../core/configs/assets/app_vectors.dart';
 
 class HomePage extends StatefulWidget {
@@ -33,6 +32,12 @@ class _HomePageState extends State<HomePage>
     return Scaffold(
       appBar: BasicAppbar(
         hideBack: true,
+        leading: IconButton(
+          onPressed: () {
+            // TODO: push to search page
+          },
+          icon: const Icon(Icons.search, size: 28),
+        ),
         action: IconButton(
           onPressed: () {
             Navigator.push(
@@ -42,7 +47,8 @@ class _HomePageState extends State<HomePage>
               ),
             );
           },
-          icon: const Icon(Icons.person),
+
+          icon: const Icon(Icons.person, size: 28),
         ),
         title: SvgPicture.asset(AppVectors.logo, height: 40, width: 40),
       ),
@@ -106,19 +112,19 @@ class _HomePageState extends State<HomePage>
       tabs: const [
         Text(
           'News',
-          style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
+          style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20),
         ),
         Text(
           'Videos',
-          style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
+          style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20),
         ),
         Text(
           'Artist',
-          style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
+          style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20),
         ),
         Text(
           'Podcast',
-          style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
+          style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20),
         ),
       ],
     );

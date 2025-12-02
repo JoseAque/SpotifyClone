@@ -77,50 +77,68 @@ class PlayList extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: [
-                  Container(
-                    height: 45,
-                    width: 45,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: context.isDarkMode
-                          ? AppColors.darkgrey
-                          : Color(0xffe6e6e6),
-                    ),
-                    child: Icon(
-                      Icons.play_arrow_rounded,
-                      color: context.isDarkMode
-                          ? const Color(0xff959595)
-                          : const Color(0xff555555),
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        songs[index].title,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                        ),
+              Expanded(
+                // <- permite que los textos se ajusten y hagan ellipsis
+                child: Row(
+                  children: [
+                    Container(
+                      height: 45,
+                      width: 45,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: context.isDarkMode
+                            ? AppColors.darkgrey
+                            : Color(0xffe6e6e6),
                       ),
-                      const SizedBox(height: 5),
-                      Text(
-                        songs[index].artist,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 11,
-                        ),
+                      child: Icon(
+                        Icons.play_arrow_rounded,
+                        color: context.isDarkMode
+                            ? const Color(0xff959595)
+                            : const Color(0xff555555),
                       ),
-                    ],
-                  ),
-                ],
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      // <- importantísimo para ellipsis
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            songs[index].title,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            softWrap: false,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
+                          const SizedBox(height: 5),
+                          Text(
+                            songs[index].artist,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            softWrap: false,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w400,
+                              fontSize: 11,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
               Row(
+                mainAxisSize: MainAxisSize.min, // <- evita expandirse
                 children: [
-                  Text(songs[index].duration.toString().replaceAll('.', ':')),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 15.0),
+                    child: Text(
+                      songs[index].duration.toString().replaceAll('.', ':'),
+                    ),
+                  ),
                   const SizedBox(width: 20),
                   FavoriteButton(songEntity: songs[index]),
                 ],

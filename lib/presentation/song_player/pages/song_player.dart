@@ -124,23 +124,53 @@ class SongPlayerPage extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 20),
-              GestureDetector(
-                onTap: () {
-                  context.read<SongPlayerCubit>().playOrPauseSong();
-                },
-                child: Container(
-                  height: 60,
-                  width: 60,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: AppColors.primary,
+              // transport controls row: repeat, previous, play/pause, next, shuffle
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      // TODO: toggle repeat mode
+                    },
+                    icon: const Icon(Icons.repeat),
                   ),
-                  child: Icon(
-                    context.read<SongPlayerCubit>().audioPlayer.playing
-                        ? Icons.pause
-                        : Icons.play_arrow,
+                  IconButton(
+                    onPressed: () {
+                      // TODO: previous track
+                    },
+                    icon: const Icon(Icons.skip_previous),
                   ),
-                ),
+                  GestureDetector(
+                    onTap: () {
+                      context.read<SongPlayerCubit>().playOrPauseSong();
+                    },
+                    child: Container(
+                      height: 60,
+                      width: 60,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: AppColors.primary,
+                      ),
+                      child: Icon(
+                        context.read<SongPlayerCubit>().audioPlayer.playing
+                            ? Icons.pause
+                            : Icons.play_arrow,
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      // TODO: next track
+                    },
+                    icon: const Icon(Icons.skip_next),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      // TODO: toggle shuffle
+                    },
+                    icon: const Icon(Icons.shuffle),
+                  ),
+                ],
               ),
             ],
           );

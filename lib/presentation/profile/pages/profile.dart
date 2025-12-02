@@ -17,9 +17,15 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const BasicAppbar(
-        backgroundColor: Color(0xff2C2B2B),
-        title: Text('Profile'),
+      appBar: BasicAppbar(
+        // Usa color según modo, o quita backgroundColor para que el tema maneje el AppBar.
+        backgroundColor: context.isDarkMode
+            ? const Color(0xff2C2B2B)
+            : Colors.white,
+        title: const Text(
+          'Profile',
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -99,7 +105,10 @@ class ProfilePage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('FAVORITE SONGS'),
+            const Text(
+              'FAVORITE SONGS',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
 
             const SizedBox(height: 20),
             BlocBuilder<FavoriteSongsCubit, FavoriteSongsState>(
@@ -125,50 +134,68 @@ class ProfilePage extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Row(
-                              children: [
-                                Container(
-                                  height: 70,
-                                  width: 70,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    image: DecorationImage(
-                                      image: NetworkImage(
-                                        '${AppURLs.coverFirestorage}${state.favoriteSongs[index].artist} - ${state.favoriteSongs[index].title}.jpg?${AppURLs.mediaAlt}',
+                            Expanded(
+                              // <- asegura que la info de la canción use el espacio disponible
+                              child: Row(
+                                children: [
+                                  Container(
+                                    height: 70,
+                                    width: 70,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      image: DecorationImage(
+                                        image: NetworkImage(
+                                          '${AppURLs.coverFirestorage}${state.favoriteSongs[index].artist} - ${state.favoriteSongs[index].title}.jpg?${AppURLs.mediaAlt}',
+                                        ),
+                                        fit: BoxFit.cover,
                                       ),
                                     ),
                                   ),
-                                ),
-
-                                const SizedBox(width: 10),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      state.favoriteSongs[index].title,
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16,
-                                      ),
+                                  const SizedBox(width: 10),
+                                  Expanded(
+                                    // <- permite que los textos hagan ellipsis
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          state.favoriteSongs[index].title,
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          softWrap: false,
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 5),
+                                        Text(
+                                          state.favoriteSongs[index].artist,
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          softWrap: false,
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 11,
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                    const SizedBox(height: 5),
-                                    Text(
-                                      state.favoriteSongs[index].artist,
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 11,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
+                                  ),
+                                ],
+                              ),
                             ),
                             Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              mainAxisSize: MainAxisSize.min,
                               children: [
-                                Text(
-                                  state.favoriteSongs[index].duration
-                                      .toString()
-                                      .replaceAll('.', ':'),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 15.0),
+                                  child: Text(
+                                    state.favoriteSongs[index].duration
+                                        .toString()
+                                        .replaceAll('.', ':'),
+                                  ),
                                 ),
                                 const SizedBox(width: 20),
                                 FavoriteButton(
