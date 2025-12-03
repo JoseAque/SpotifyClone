@@ -105,7 +105,12 @@ class SongPlayerPage extends StatelessWidget {
                     .songDuration
                     .inSeconds
                     .toDouble(),
-                onChanged: (value) {},
+                onChanged: (value) {
+                  // Seek to the selected position in seconds
+                  context.read<SongPlayerCubit>().audioPlayer.seek(
+                    Duration(seconds: value.toInt()),
+                  );
+                },
               ),
               const SizedBox(height: 20),
               Row(
