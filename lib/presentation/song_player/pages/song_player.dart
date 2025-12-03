@@ -8,9 +8,50 @@ import 'package:spotify/domain/entities/song/song.dart';
 import 'package:spotify/presentation/song_player/bloc/song_player_cubit.dart';
 import 'package:spotify/presentation/song_player/bloc/song_player_state.dart';
 
-class SongPlayerPage extends StatelessWidget {
+class SongPlayerPage extends StatefulWidget {
   final SongEntity songEntity;
-  const SongPlayerPage({required this.songEntity, super.key});
+  final List<SongEntity> songs;
+  final int currentIndex;
+  final bool autoPlay;
+
+  const SongPlayerPage({
+    required this.songEntity,
+    required this.songs,
+    required this.currentIndex,
+    this.autoPlay = false,
+    super.key,
+  });
+
+  @override
+  State<SongPlayerPage> createState() => _SongPlayerPageState();
+}
+
+class _SongPlayerPageState extends State<SongPlayerPage> {
+  late SongPlayerCubit _cubit;
+
+  @override
+  void initState() {
+    super.initState();
+    _cubit = SongPlayerCubit();
+    _loadAndPlaySong();
+  }
+
+  Future<void> _loadAndPlaySong() async {
+    await _cubit.loadSong(
+      '${AppURLs.songFirestorage}${widget.songEntity.artist} - ${widget.songEntity.title}.mp3?${AppURLs.mediaAlt}',
+    );
+
+    // Si autoPlay está activado, reproducir automáticamente
+    if (widget.autoPlay) {
+      _cubit.audioPlayer.play();
+    }
+  }
+
+  @override
+  void dispose() {
+    _cubit.close();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,11 +66,8 @@ class SongPlayerPage extends StatelessWidget {
           icon: const Icon(Icons.more_vert_rounded),
         ),
       ),
-      body: BlocProvider(
-        create: (_) => SongPlayerCubit()
-          ..loadSong(
-            '${AppURLs.songFirestorage}${songEntity.artist} - ${songEntity.title}.mp3?${AppURLs.mediaAlt}',
-          ),
+      body: BlocProvider.value(
+        value: _cubit,
         child: SingleChildScrollView(
           padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
           child: Column(
@@ -54,7 +92,7 @@ class SongPlayerPage extends StatelessWidget {
         image: DecorationImage(
           fit: BoxFit.cover,
           image: NetworkImage(
-            '${AppURLs.coverFirestorage}${songEntity.artist} - ${songEntity.title}.jpg?${AppURLs.mediaAlt}',
+            '${AppURLs.coverFirestorage}${widget.songEntity.artist} - ${widget.songEntity.title}.jpg?${AppURLs.mediaAlt}',
           ),
         ),
       ),
@@ -69,17 +107,17 @@ class SongPlayerPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              songEntity.title,
+              widget.songEntity.title,
               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
             ),
             const SizedBox(height: 5),
             Text(
-              songEntity.artist,
+              widget.songEntity.artist,
               style: const TextStyle(fontWeight: FontWeight.w400, fontSize: 14),
             ),
           ],
         ),
-        FavoriteButton(songEntity: songEntity),
+        FavoriteButton(songEntity: widget.songEntity),
       ],
     );
   }
@@ -151,7 +189,41 @@ class SongPlayerPage extends StatelessWidget {
                   ),
                   IconButton(
                     onPressed: () {
-                      // TODO: previous track
+                      // Navigate to previous song (circular)
+                      final previousIndex = widget.currentIndex == 0
+                          ? widget.songs.length - 1
+                          : widget.currentIndex - 1;
+
+                      Navigator.pushReplacement(
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder:
+                              (context, animation, secondaryAnimation) =>
+                                  SongPlayerPage(
+                                    songEntity: widget.songs[previousIndex],
+                                    songs: widget.songs,
+                                    currentIndex: previousIndex,
+                                    autoPlay: true,
+                                  ),
+                          transitionsBuilder:
+                              (context, animation, secondaryAnimation, child) {
+                                const begin = Offset(-1.0, 0.0);
+                                const end = Offset.zero;
+                                const curve = Curves.easeInOut;
+
+                                var tween = Tween(
+                                  begin: begin,
+                                  end: end,
+                                ).chain(CurveTween(curve: curve));
+
+                                return SlideTransition(
+                                  position: animation.drive(tween),
+                                  child: child,
+                                );
+                              },
+                          transitionDuration: const Duration(milliseconds: 300),
+                        ),
+                      );
                     },
                     icon: const Icon(Icons.skip_previous),
                   ),
@@ -175,7 +247,42 @@ class SongPlayerPage extends StatelessWidget {
                   ),
                   IconButton(
                     onPressed: () {
-                      // TODO: next track
+                      // Navigate to next song (circular)
+                      final nextIndex =
+                          widget.currentIndex == widget.songs.length - 1
+                          ? 0
+                          : widget.currentIndex + 1;
+
+                      Navigator.pushReplacement(
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder:
+                              (context, animation, secondaryAnimation) =>
+                                  SongPlayerPage(
+                                    songEntity: widget.songs[nextIndex],
+                                    songs: widget.songs,
+                                    currentIndex: nextIndex,
+                                    autoPlay: true,
+                                  ),
+                          transitionsBuilder:
+                              (context, animation, secondaryAnimation, child) {
+                                const begin = Offset(1.0, 0.0);
+                                const end = Offset.zero;
+                                const curve = Curves.easeInOut;
+
+                                var tween = Tween(
+                                  begin: begin,
+                                  end: end,
+                                ).chain(CurveTween(curve: curve));
+
+                                return SlideTransition(
+                                  position: animation.drive(tween),
+                                  child: child,
+                                );
+                              },
+                          transitionDuration: const Duration(milliseconds: 300),
+                        ),
+                      );
                     },
                     icon: const Icon(Icons.skip_next),
                   ),

@@ -127,6 +127,8 @@ class ProfilePage extends StatelessWidget {
                             MaterialPageRoute(
                               builder: (BuildContext context) => SongPlayerPage(
                                 songEntity: state.favoriteSongs[index],
+                                songs: state.favoriteSongs,
+                                currentIndex: index,
                               ),
                             ),
                           );
