@@ -105,11 +105,21 @@ class SongPlayerPage extends StatelessWidget {
                     .songDuration
                     .inSeconds
                     .toDouble(),
+                onChangeStart: (_) {
+                  context.read<SongPlayerCubit>().startScrub();
+                },
                 onChanged: (value) {
-                  // Seek to the selected position in seconds
-                  context.read<SongPlayerCubit>().audioPlayer.seek(
+                  // Update UI while dragging
+                  final cubit = context.read<SongPlayerCubit>();
+                  cubit.songPosition = Duration(seconds: value.toInt());
+                  cubit.updateSongPlayer();
+                },
+                onChangeEnd: (value) {
+                  // Perform actual seek when user finishes dragging
+                  context.read<SongPlayerCubit>().seekTo(
                     Duration(seconds: value.toInt()),
                   );
+                  context.read<SongPlayerCubit>().endScrub();
                 },
               ),
               const SizedBox(height: 20),
