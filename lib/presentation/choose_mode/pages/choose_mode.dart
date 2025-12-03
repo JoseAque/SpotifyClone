@@ -24,7 +24,7 @@ class ChooseModePage extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 40),
             decoration: const BoxDecoration(
               image: DecorationImage(
-                fit: BoxFit.fill,
+                fit: BoxFit.cover,
                 image: AssetImage(AppImages.chooseModeBG),
               ),
             ),

@@ -26,6 +26,7 @@ class SongPlayerCubit extends Cubit<SongPlayerState> {
     durationSub = audioPlayer.durationStream.listen((duration) {
       if (duration != null) {
         songDuration = duration;
+        updateSongPlayer(); // Actualizar UI cuando llegue la duración
       }
     });
   }
