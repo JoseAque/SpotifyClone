@@ -119,6 +119,11 @@ class ProfilePage extends StatelessWidget {
                   return const CircularProgressIndicator();
                 }
                 if (state is FavoriteSongsLoaded) {
+                  if (state.favoriteSongs.isEmpty) {
+                    return const Center(
+                      child: Text('No favorite songs'),
+                    );
+                  }
                   return ListView.separated(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
@@ -221,6 +226,7 @@ class ProfilePage extends StatelessWidget {
                     separatorBuilder: (context, index) =>
                         const SizedBox(height: 20),
                     itemCount: state.favoriteSongs.length,
+
                   );
                 }
                 if (state is FavoriteSongsFailure) {
