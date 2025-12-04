@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:spotify/common/helpers/is_dark_mode.dart';
 import 'package:spotify/common/widgets/appbar/app_bar.dart';
 import 'package:spotify/core/configs/assets/app_images.dart';
 import 'package:spotify/core/configs/theme/app_colors.dart';
+import 'package:spotify/presentation/choose_mode/bloc/theme_cubit.dart';
 import 'package:spotify/presentation/home/widgets/news_songs.dart';
 import 'package:spotify/presentation/home/widgets/play_list.dart';
 import 'package:spotify/presentation/profile/pages/profile.dart';
@@ -34,9 +36,18 @@ class _HomePageState extends State<HomePage>
         hideBack: true,
         leading: IconButton(
           onPressed: () {
-            // TODO: push to search page
+            context.read<ThemeCubit>().updateTheme(
+              context.isDarkMode ? ThemeMode.light : ThemeMode.dark,
+            );
           },
-          icon: const Icon(Icons.search, size: 28),
+          icon: SvgPicture.asset(
+            context.isDarkMode ? AppVectors.sun : AppVectors.moon,
+            height: 28,
+            width: 28,
+            colorFilter: context.isDarkMode 
+                ? null 
+                : const ColorFilter.mode(Colors.black, BlendMode.srcIn),
+          ),
         ),
         action: IconButton(
           onPressed: () {
@@ -47,7 +58,6 @@ class _HomePageState extends State<HomePage>
               ),
             );
           },
-
           icon: const Icon(Icons.person, size: 28),
         ),
         title: SvgPicture.asset(AppVectors.logo, height: 40, width: 40),

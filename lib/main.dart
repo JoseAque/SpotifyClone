@@ -10,6 +10,7 @@ import 'package:spotify/presentation/choose_mode/bloc/theme_cubit.dart';
 import 'package:spotify/common/bloc/favorite_button/favorite_button_cubit.dart';
 import 'package:spotify/presentation/splash/pages/splash.dart';
 import 'package:spotify/service_locator.dart';
+import 'package:spotify/common/helpers/web_theme_color_helper.dart' if (dart.library.io) 'package:spotify/common/helpers/web_theme_color_helper_stub.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,13 +38,19 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => FavoritesCubit()..load()),
       ],
       child: BlocBuilder<ThemeCubit, ThemeMode>(
-        builder: (context, mode) => MaterialApp(
-          theme: AppTheme.lightTheme,
-          darkTheme: AppTheme.darkTheme,
-          themeMode: mode,
-          debugShowCheckedModeBanner: false,
-          home: const SplashPage(),
-        ),
+        builder: (context, mode) {
+          // Update PWA theme-color meta tag dynamically for web
+          if (kIsWeb) {
+            updateThemeColor(mode == ThemeMode.dark);
+          }
+          return MaterialApp(
+            theme: AppTheme.lightTheme,
+            darkTheme: AppTheme.darkTheme,
+            themeMode: mode,
+            debugShowCheckedModeBanner: false,
+            home: const SplashPage(),
+          );
+        },
       ),
     );
   }

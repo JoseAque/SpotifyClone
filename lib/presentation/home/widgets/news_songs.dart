@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spotify/common/helpers/is_dark_mode.dart';
 import 'package:spotify/core/configs/constants/app_urls.dart';
 import 'package:spotify/domain/entities/song/song.dart';
+import 'package:spotify/presentation/choose_mode/bloc/theme_cubit.dart';
 import 'package:spotify/presentation/home/bloc/news_songs_cubit.dart';
 import 'package:spotify/presentation/home/bloc/news_songs_state.dart';
 import 'package:spotify/presentation/song_player/pages/song_player.dart';
@@ -44,16 +45,21 @@ class NewsSongs extends StatelessWidget {
   }
 
   Widget _songs(List<SongEntity> songs) {
-    return ScrollConfiguration(
-      //Para poder mover las canciones con el mouse
-      behavior: const MaterialScrollBehavior().copyWith(
-        dragDevices: {
-          PointerDeviceKind.mouse,
-          PointerDeviceKind.touch,
-          PointerDeviceKind.trackpad,
-        },
-      ),
-      child: ListView.separated(
+    return BlocBuilder<ThemeCubit, ThemeMode>(
+      builder: (context, themeMode) {
+        final isDark = themeMode == ThemeMode.dark || 
+                       (themeMode == ThemeMode.system && 
+                        MediaQuery.of(context).platformBrightness == Brightness.dark);
+        return ScrollConfiguration(
+          //Para poder mover las canciones con el mouse
+          behavior: const MaterialScrollBehavior().copyWith(
+            dragDevices: {
+              PointerDeviceKind.mouse,
+              PointerDeviceKind.touch,
+              PointerDeviceKind.trackpad,
+            },
+          ),
+          child: ListView.separated(
         scrollDirection: Axis.horizontal,
         itemBuilder: (context, index) {
           return GestureDetector(
@@ -94,15 +100,15 @@ class NewsSongs extends StatelessWidget {
                           transform: Matrix4.translationValues(10, 10, 0),
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: context.isDarkMode
+                            color: isDark
                                 ? AppColors.darkgrey
                                 : const Color(0xffe6e6e6),
                           ),
                           child: Icon(
                             Icons.play_arrow_rounded,
-                            color: context.isDarkMode
+                            color: isDark
                                 ? const Color(0xff959595)
-                                : const Color(0xff555555),
+                                : Colors.black54,
                           ),
                         ),
                       ),
@@ -146,7 +152,9 @@ class NewsSongs extends StatelessWidget {
         },
         separatorBuilder: (context, index) => const SizedBox(width: 14),
         itemCount: songs.length,
-      ),
+          ),
+        );
+      },
     );
   }
 }

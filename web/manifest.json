@@ -1,8 +1,8 @@
 {
   "name": "SpotifyC",
-  "short_name": "spotify",
+  "short_name": "SpotifyC",
   "start_url": ".",
-  "display": "fullscreen",
+  "display": "standalone",
   "description": "spotify clone",
   "theme_color": "#000000",
   "background_color": "#000000",
