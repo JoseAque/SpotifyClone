@@ -242,6 +242,7 @@ class _SongPlayerPageState extends State<SongPlayerPage> {
                     padding: const EdgeInsets.only(left: 60.0),
                     child: IconButton(
                       iconSize: 30,
+                      style: IconButton.styleFrom(shape: const CircleBorder()),
                       onPressed: () {
                         // Navigate to previous song (circular)
                         final previousIndex = widget.currentIndex == 0
@@ -307,48 +308,57 @@ class _SongPlayerPageState extends State<SongPlayerPage> {
                       ),
                     ),
                   ),
-                  IconButton(
-                    onPressed: () {
-                      // Navigate to next song (circular)
-                      final nextIndex =
-                          widget.currentIndex == widget.songs.length - 1
-                          ? 0
-                          : widget.currentIndex + 1;
+                  Padding(
+                    padding: const EdgeInsets.only(right: 60),
+                    child: IconButton(
+                      iconSize: 30,
+                      style: IconButton.styleFrom(shape: const CircleBorder()),
+                      onPressed: () {
+                        // Navigate to next song (circular)
+                        final nextIndex =
+                            widget.currentIndex == widget.songs.length - 1
+                            ? 0
+                            : widget.currentIndex + 1;
 
-                      Navigator.pushReplacement(
-                        context,
-                        PageRouteBuilder(
-                          pageBuilder:
-                              (context, animation, secondaryAnimation) =>
-                                  SongPlayerPage(
-                                    songEntity: widget.songs[nextIndex],
-                                    songs: widget.songs,
-                                    currentIndex: nextIndex,
-                                    autoPlay: true,
-                                  ),
-                          transitionsBuilder:
-                              (context, animation, secondaryAnimation, child) {
-                                const begin = Offset(1.0, 0.0);
-                                const end = Offset.zero;
-                                const curve = Curves.easeInOut;
+                        Navigator.pushReplacement(
+                          context,
+                          PageRouteBuilder(
+                            pageBuilder:
+                                (context, animation, secondaryAnimation) =>
+                                    SongPlayerPage(
+                                      songEntity: widget.songs[nextIndex],
+                                      songs: widget.songs,
+                                      currentIndex: nextIndex,
+                                      autoPlay: true,
+                                    ),
+                            transitionsBuilder:
+                                (
+                                  context,
+                                  animation,
+                                  secondaryAnimation,
+                                  child,
+                                ) {
+                                  const begin = Offset(1.0, 0.0);
+                                  const end = Offset.zero;
+                                  const curve = Curves.easeInOut;
 
-                                var tween = Tween(
-                                  begin: begin,
-                                  end: end,
-                                ).chain(CurveTween(curve: curve));
+                                  var tween = Tween(
+                                    begin: begin,
+                                    end: end,
+                                  ).chain(CurveTween(curve: curve));
 
-                                return SlideTransition(
-                                  position: animation.drive(tween),
-                                  child: child,
-                                );
-                              },
-                          transitionDuration: const Duration(milliseconds: 300),
-                        ),
-                      );
-                    },
-                    icon: Padding(
-                      padding: const EdgeInsets.only(right: 60),
-                      child: const Icon(size: 30, Icons.skip_next),
+                                  return SlideTransition(
+                                    position: animation.drive(tween),
+                                    child: child,
+                                  );
+                                },
+                            transitionDuration: const Duration(
+                              milliseconds: 300,
+                            ),
+                          ),
+                        );
+                      },
+                      icon: const Icon(Icons.skip_next),
                     ),
                   ),
                 ],

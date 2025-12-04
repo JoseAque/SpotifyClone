@@ -40,6 +40,12 @@ class AppTheme {
     progressIndicatorTheme: const ProgressIndicatorThemeData(
       color: AppColors.primary,
     ),
+    sliderTheme: SliderThemeData(
+      activeTrackColor: AppColors.primary,
+      inactiveTrackColor: Colors.grey.withOpacity(0.3),
+      thumbColor: AppColors.darkBackground,
+      overlayColor: AppColors.primary.withOpacity(0.2),
+    ),
   );
 
   //tema oscuro de la app
@@ -79,6 +85,12 @@ class AppTheme {
     ),
     progressIndicatorTheme: const ProgressIndicatorThemeData(
       color: AppColors.primary,
+    ),
+    sliderTheme: SliderThemeData(
+      activeTrackColor: AppColors.primary,
+      inactiveTrackColor: Colors.grey.withOpacity(0.3),
+      thumbColor: AppColors.lightBackground,
+      overlayColor: AppColors.primary.withOpacity(0.2),
     ),
   );
 }
