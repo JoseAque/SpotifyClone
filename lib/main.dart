@@ -10,7 +10,8 @@ import 'package:spotify/presentation/choose_mode/bloc/theme_cubit.dart';
 import 'package:spotify/common/bloc/favorite_button/favorite_button_cubit.dart';
 import 'package:spotify/presentation/splash/pages/splash.dart';
 import 'package:spotify/service_locator.dart';
-import 'package:spotify/common/helpers/web_theme_color_helper.dart' if (dart.library.io) 'package:spotify/common/helpers/web_theme_color_helper_stub.dart';
+import 'package:spotify/common/helpers/web_theme_color_helper.dart'
+    if (dart.library.io) 'package:spotify/common/helpers/web_theme_color_helper_stub.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

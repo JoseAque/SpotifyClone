@@ -11,10 +11,14 @@ import 'package:spotify/core/configs/theme/app_colors.dart';
 /// [isDarkMode] - true for dark theme (AppColors.darkBackground), false for light theme (AppColors.lightBackground).
 void updateThemeColor(bool isDarkMode) {
   try {
-    final meta = html.document.getElementById('theme-color-meta') as html.MetaElement?;
+    final meta =
+        html.document.getElementById('theme-color-meta') as html.MetaElement?;
     if (meta != null) {
-      final color = isDarkMode ? AppColors.darkBackground : AppColors.lightBackground;
-      meta.content = '#${color.value.toRadixString(16).substring(2).padLeft(6, '0')}';
+      final color = isDarkMode
+          ? AppColors.darkBackground
+          : AppColors.lightBackground;
+      meta.content =
+          '#${color.value.toRadixString(16).substring(2).padLeft(6, '0')}';
     }
   } catch (e) {
     // Ignore errors on non-web platforms (dart:html only available on web)

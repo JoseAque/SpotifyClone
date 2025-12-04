@@ -63,9 +63,10 @@ class PlayList extends StatelessWidget {
   Widget _songs(List<SongEntity> songs) {
     return BlocBuilder<ThemeCubit, ThemeMode>(
       builder: (context, themeMode) {
-        final isDark = themeMode == ThemeMode.dark || 
-                       (themeMode == ThemeMode.system && 
-                        MediaQuery.of(context).platformBrightness == Brightness.dark);
+        final isDark =
+            themeMode == ThemeMode.dark ||
+            (themeMode == ThemeMode.system &&
+                MediaQuery.of(context).platformBrightness == Brightness.dark);
         return ListView.separated(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),

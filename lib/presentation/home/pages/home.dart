@@ -44,8 +44,8 @@ class _HomePageState extends State<HomePage>
             context.isDarkMode ? AppVectors.sun : AppVectors.moon,
             height: 28,
             width: 28,
-            colorFilter: context.isDarkMode 
-                ? null 
+            colorFilter: context.isDarkMode
+                ? null
                 : const ColorFilter.mode(Colors.black, BlendMode.srcIn),
           ),
         ),
