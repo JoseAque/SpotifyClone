@@ -62,7 +62,51 @@ class _SongPlayerPageState extends State<SongPlayerPage> {
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
         action: IconButton(
-          onPressed: () {},
+          onPressed: () {
+            showMenu(
+              context: context,
+              position: RelativeRect.fromLTRB(
+                MediaQuery.of(context).size.width - 50,
+                60,
+                20,
+                0,
+              ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              elevation: 8,
+              shadowColor: AppColors.grey.withOpacity(0.8),
+              color: Theme.of(context).scaffoldBackgroundColor,
+              items: [
+                PopupMenuItem<String>(
+                  value: 'hello',
+                  mouseCursor: SystemMouseCursors.click,
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      splashColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
+                      hoverColor: Colors.transparent,
+                      onTap: () {
+                        Navigator.pop(context, 'hello');
+                      },
+                      child: const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 8.0),
+                        child: Text(
+                          'Hola :)',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ).then((value) {
+              if (value == 'hello') {
+                // Acción para "Hola :)"
+              }
+            });
+          },
           icon: const Icon(Icons.more_vert_rounded),
         ),
       ),
@@ -194,51 +238,56 @@ class _SongPlayerPageState extends State<SongPlayerPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  IconButton(
-                    onPressed: () {
-                      // TODO: toggle repeat mode
-                    },
-                    icon: const Icon(Icons.repeat),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      // Navigate to previous song (circular)
-                      final previousIndex = widget.currentIndex == 0
-                          ? widget.songs.length - 1
-                          : widget.currentIndex - 1;
+                  Padding(
+                    padding: const EdgeInsets.only(left: 60.0),
+                    child: IconButton(
+                      iconSize: 30,
+                      onPressed: () {
+                        // Navigate to previous song (circular)
+                        final previousIndex = widget.currentIndex == 0
+                            ? widget.songs.length - 1
+                            : widget.currentIndex - 1;
 
-                      Navigator.pushReplacement(
-                        context,
-                        PageRouteBuilder(
-                          pageBuilder:
-                              (context, animation, secondaryAnimation) =>
-                                  SongPlayerPage(
-                                    songEntity: widget.songs[previousIndex],
-                                    songs: widget.songs,
-                                    currentIndex: previousIndex,
-                                    autoPlay: true,
-                                  ),
-                          transitionsBuilder:
-                              (context, animation, secondaryAnimation, child) {
-                                const begin = Offset(-1.0, 0.0);
-                                const end = Offset.zero;
-                                const curve = Curves.easeInOut;
+                        Navigator.pushReplacement(
+                          context,
+                          PageRouteBuilder(
+                            pageBuilder:
+                                (context, animation, secondaryAnimation) =>
+                                    SongPlayerPage(
+                                      songEntity: widget.songs[previousIndex],
+                                      songs: widget.songs,
+                                      currentIndex: previousIndex,
+                                      autoPlay: true,
+                                    ),
+                            transitionsBuilder:
+                                (
+                                  context,
+                                  animation,
+                                  secondaryAnimation,
+                                  child,
+                                ) {
+                                  const begin = Offset(-1.0, 0.0);
+                                  const end = Offset.zero;
+                                  const curve = Curves.easeInOut;
 
-                                var tween = Tween(
-                                  begin: begin,
-                                  end: end,
-                                ).chain(CurveTween(curve: curve));
+                                  var tween = Tween(
+                                    begin: begin,
+                                    end: end,
+                                  ).chain(CurveTween(curve: curve));
 
-                                return SlideTransition(
-                                  position: animation.drive(tween),
-                                  child: child,
-                                );
-                              },
-                          transitionDuration: const Duration(milliseconds: 300),
-                        ),
-                      );
-                    },
-                    icon: const Icon(Icons.skip_previous),
+                                  return SlideTransition(
+                                    position: animation.drive(tween),
+                                    child: child,
+                                  );
+                                },
+                            transitionDuration: const Duration(
+                              milliseconds: 300,
+                            ),
+                          ),
+                        );
+                      },
+                      icon: const Icon(Icons.skip_previous),
+                    ),
                   ),
                   GestureDetector(
                     onTap: () {
@@ -297,13 +346,10 @@ class _SongPlayerPageState extends State<SongPlayerPage> {
                         ),
                       );
                     },
-                    icon: const Icon(Icons.skip_next),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      // TODO: toggle shuffle
-                    },
-                    icon: const Icon(Icons.shuffle),
+                    icon: Padding(
+                      padding: const EdgeInsets.only(right: 60),
+                      child: const Icon(size: 30, Icons.skip_next),
+                    ),
                   ),
                 ],
               ),

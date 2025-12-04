@@ -27,13 +27,15 @@ class ProfilePage extends StatelessWidget {
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _profileInfo(context),
-          const SizedBox(height: 30),
-          _favoriteSongs(),
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _profileInfo(context),
+            const SizedBox(height: 30),
+            _favoriteSongs(),
+          ],
+        ),
       ),
     );
   }
@@ -119,6 +121,7 @@ class ProfilePage extends StatelessWidget {
                 if (state is FavoriteSongsLoaded) {
                   return ListView.separated(
                     shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
                     itemBuilder: (context, index) {
                       return GestureDetector(
                         onTap: () {
